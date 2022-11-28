@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import Typography from '../atoms/typography'
 import Button from '../atoms/button'
 import Link from '../atoms/link'
@@ -97,12 +96,12 @@ export const Confirm = ({
   alert?: boolean
   processing?: boolean
 }): JSX.Element => {
-  const DialogIcon = () =>
-    _.head(
-      IconMapping.filter((map: Map) => map.key === icon).map(
-        (map: Map) => map.element
-      )
-    )
+  const DialogIcon = () => {
+    const IconMappingArray = IconMapping.filter(
+      (map: Map) => map.key === icon
+    ).map((map: Map) => map.element)
+    return IconMappingArray[0]
+  }
 
   return (
     <div

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 type Map = {
   key: string
   class: string[]
@@ -62,16 +60,16 @@ export const Button = ({
   classes?: string[]
   onClick?: (event: any) => void
 }): JSX.Element => {
-  const _color = _.head(
-    ColorSetting.filter((map: Map) => map.key === color).map(
-      (map: Map) => map.class
-    )
+  const colorArray = ColorSetting.filter((map: Map) => map.key === color).map(
+    (map: Map) => map.class
   )
-  const _size = _.head(
-    SizeSetting.filter((map: Map) => map.key === size).map(
-      (map: Map) => map.class
-    )
+  const colorList = colorArray[0].join(' ')
+
+  const sizeArray = SizeSetting.filter((map: Map) => map.key === size).map(
+    (map: Map) => map.class
   )
+  const sizeList = sizeArray[0].join(' ')
+
   const className = [
     'inline-flex',
     'justify-center',
@@ -80,8 +78,8 @@ export const Button = ({
     'focus:outline-none',
     'focus:ring-2',
     'focus:ring-offset-2',
-    ..._color,
-    ..._size,
+    colorList,
+    sizeList,
     ...classes,
   ].join(' ')
 

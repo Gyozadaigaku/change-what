@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 type Map = {
   key: string
   class: string[]
@@ -36,12 +34,11 @@ export const Typography = ({
     | 'body2'
   classes?: string[]
 }): JSX.Element => {
-  const _classes = _.head(
-    VariantSetting.filter((map: Map) => map.key === variant).map(
-      (map: Map) => map.class
-    )
-  )
-  const className = [..._classes, ...classes].join(' ')
+  const classesArray = VariantSetting.filter(
+    (map: Map) => map.key === variant
+  ).map((map: Map) => map.class)
+  const classesList = classesArray[0].join(' ')
+  const className = [classesList, ...classes].join(' ')
 
   return (
     <div>

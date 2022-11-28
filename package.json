@@ -1,0 +1,67 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc --pretty --noEmit",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "test": "jest",
+    "test-all": "yarn lint && yarn type-check && yarn test",
+    "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "yarn run type-check"
+    }
+  },
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "yarn lint",
+      "yarn format"
+    ]
+  },
+  "dependencies": {
+    "@hookform/resolvers": "2.8.0",
+    "axios": "0.21.4",
+    "date-fns": "2.23.0",
+    "jsonwebtoken": "8.5.1",
+    "lodash": "4.17.21",
+    "next": "11.1.2",
+    "nookies": "2.5.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-hook-form": "7.15.1",
+    "react-query": "3.23.1",
+    "react-toastify": "8.0.2",
+    "yup": "0.32.9"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "0.3.3",
+    "@tailwindcss/line-clamp": "0.2.1",
+    "@tailwindcss/typography": "0.4.1",
+    "@testing-library/react": "12.0.0",
+    "@types/jest": "27.0.1",
+    "@types/node": "16.4.0",
+    "@types/react": "17.0.20",
+    "@typescript-eslint/eslint-plugin": "4.31.0",
+    "@typescript-eslint/parser": "4.31.0",
+    "autoprefixer": "10.3.4",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-react": "7.25.1",
+    "husky": "7.0.2",
+    "babel-jest": "27.1.1",
+    "jest": "27.1.1",
+    "jest-watch-typeahead": "0.6.4",
+    "lint-staged": "11.1.2",
+    "prettier": "2.3.2",
+    "tailwindcss": "2.2.14",
+    "typescript": "4.4.2"
+  }
+}

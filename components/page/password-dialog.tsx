@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 import { AxiosPromise } from 'axios'
 import { useMutation } from 'react-query'
 import { Progress } from '../../components/progress'
@@ -20,23 +20,27 @@ type FormValues = {
   confirmPassword: string
 }
 
-const schema = yup.object().shape({
-  password: yup
-    .string()
-    .required('入力してください')
-    .matches(
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      'アルファベット（大文字小文字混在）と数字と特殊記号を組み合わせて8文字以上で入力してください'
-    ),
-  confirmPassword: yup
-    .string()
-    .required('入力してください')
-    .matches(
-      /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-      'アルファベット（大文字小文字混在）と数字と特殊記号を組み合わせて8文字以上で入力してください'
-    )
-    .oneOf([yup.ref('password'), null], '確認用パスワードが一致していません'),
-})
+const schema = z
+  .object({
+    password: z
+      .string()
+      .min(1, { message: '入力してください' })
+      .regex(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        'アルファベット（大文字小文字混在）と数字と特殊記号を組み合わせて8文字以上で入力してください'
+      ),
+    confirmPassword: z
+      .string()
+      .min(1, { message: '入力してください' })
+      .regex(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        'アルファベット（大文字小文字混在）と数字と特殊記号を組み合わせて8文字以上で入力してください'
+      ),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: '確認用パスワードが一致していません',
+    path: ['confirmPassword'],
+  })
 
 export const PasswordDialog = ({
   onSubmit,
@@ -52,7 +56,7 @@ export const PasswordDialog = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
     defaultValues: {
       password: 'Password1?',
       confirmPassword: 'Password1?',

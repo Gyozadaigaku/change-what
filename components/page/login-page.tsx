@@ -3,8 +3,8 @@ import Head from 'next/head'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 import { AxiosPromise, AxiosResponse, AxiosError } from 'axios'
 import { useMutation } from 'react-query'
 import { destroyCookie, setCookie, parseCookies } from 'nookies'
@@ -36,15 +36,15 @@ type FormValues = {
   rememberMe: boolean
 }
 
-const schema = yup.object().shape({
-  email: yup
+const schema = z.object({
+  email: z
     .string()
-    .required('入力してください')
+    .min(1, { message: '入力してください' })
     .email('メールアドレスを入力してください'),
-  password: yup
+  password: z
     .string()
-    .required('入力してください')
-    .matches(
+    .min(1, { message: '入力してください' })
+    .regex(
       /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
       'アルファベット（大文字小文字混在）と数字と特殊記号を組み合わせて8文字以上で入力してください'
     ),
@@ -67,7 +67,7 @@ export const LoginPage = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
     defaultValues: {
       // email: 'test@test.com',
       // password: 'Password1?',

@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import * as yup from 'yup'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
 import { toast } from 'react-toastify'
 import { AxiosPromise } from 'axios'
 import { useMutation } from 'react-query'
@@ -20,8 +20,11 @@ type FormValues = {
   code: string
 }
 
-const schema = yup.object().shape({
-  code: yup.number().required('入力してください'),
+const schema = z.object({
+  code: z.number({
+    required_error: '入力してください',
+    invalid_type_error: '入力してください',
+  }),
 })
 
 export const ConfirmCodeModal = ({
@@ -38,7 +41,7 @@ export const ConfirmCodeModal = ({
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   })
   const mutation = useMutation(
     (req: VerifyCodeRequest): AxiosPromise<BaseResponse> =>
